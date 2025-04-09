@@ -47,13 +47,7 @@ new class extends Component {
     {
         $data =$this->validate();
 
-        $this->user = User::create([
-            'name'       => $this->name,
-            'password'   => $this->password,
-            'email'      => $this->email,
-            'bio'        => $this->bio,
-            'country_id' => $this->country_id,
-        ]);
+        $this->user = User::create($data);
 
         $this->user->languages()->sync($this->my_languages);
 

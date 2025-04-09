@@ -10,6 +10,7 @@ use Mary\Traits\Toast;
 use Livewire\WithPagination;
 
 new class extends Component {
+    
     use WithPagination;
 
     use Toast;
@@ -27,12 +28,6 @@ new class extends Component {
         $this->resetPage(); 
         $this->success('Filters cleared.', position: 'toast-bottom');
     }
-
-    // Delete action
-    // public function delete($id): void
-    // {
-    //     $this->warning("Will delete #$id", 'It is fake.', position: 'toast-bottom');
-    // }
 
     public function delete(User $user): void
     {
@@ -59,25 +54,17 @@ new class extends Component {
      * Please, refer to maryUI docs to see the eloquent examples.
      */
     
-//     public function users(): Collection
-// {
-//     return User::query()
-//         ->with(['country'])
-//         ->withAggregate('country', 'name')
-//         ->when($this->search, fn(Builder $q) => $q->where('name', 'like', "%$this->search%"))
-//         ->orderBy(...array_values($this->sortBy))
-//         ->get();
-// }
+
 
     public function users(): LengthAwarePaginator
-{
+    {
     return User::query()
         ->withAggregate('country', 'name')
         ->when($this->search,     fn(Builder $q) => $q->where('name', 'like', "%$this->search%"))
         ->when($this->country_id, fn(Builder $q) => $q->where('country_id', $this->country_id))
         ->orderBy(...array_values($this->sortBy))
         ->paginate(5);
-}
+    }
 
     public function with(): array
     {
@@ -109,7 +96,7 @@ new class extends Component {
             <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
         </x-slot:middle>
         <x-slot:actions>
-            <x-button label="Filters" @click="$wire.drawer = true" responsive icon="o-funnel" badge badge-classes="badge-warning" />
+            <x-button label="Filters" @click="$wire.drawer = true" responsive icon="o-funnel" badge-classes="badge-warning" />
             <x-button label="create" link="/users/create" responsive icon="o-plus" class="btn-primary" />
         </x-slot:actions>
     </x-header>
