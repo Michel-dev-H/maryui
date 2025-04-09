@@ -40,6 +40,14 @@ new class extends Component {
         $this->my_languages = $this->user->languages->pluck('id')->all();
     }
 
+    public function with(): array
+    {
+        return [
+            'countries' => Country::all(),
+            'languages' => Language::all(),
+        ];
+    }
+    
     public function save(): void
     {
         $data = $this->validate();
@@ -55,48 +63,40 @@ new class extends Component {
 
         $this->success('User updated with success.', redirectTo: '/users');
     }
-
-    public function with(): array
-    {
-        return [
-            'countries' => Country::all(),
-            'languages' => Language::all(),
-        ];
-    }
 };
 ?>
 
 <div>
     <x-header title="Update {{ $user->name }}" separator />
         
-        <div class="grid gap-5 lg:grid-cols-2">
-            <div>
-                <x-form wire:submit="save">
-                    
-                    <x-file label="Avatar" wire:model="photo" accept="image/png, image/jpeg" crop-after-change>
-                        <img src="{{ $user->avatar ?? '/empty-user.jpg' }}" class="h-36 rounded-lg">
-                    </x-file>
+    <div class="grid gap-5 lg:grid-cols-2">
+        <div>
+            <x-form wire:submit="save">
+                
+                <x-file label="Avatar" wire:model="photo" accept="image/png, image/jpeg" crop-after-change>
+                    <img src="{{ $user->avatar ?? '/empty-user.jpg' }}" class="h-36 rounded-lg">
+                </x-file>
 
-                    <x-input label="Name" wire:model="name" />
-                    <x-input label="Email" wire:model="email" />
-                    <x-select label="country" wire:model="country_id" :options="$countries" placeholder="---" />
+                <x-input label="Name" wire:model="name" />
+                <x-input label="Email" wire:model="email" />
+                <x-select label="country" wire:model="country_id" :options="$countries" placeholder="---" />
 
-                    <x-choices-offline
-                        label="My Languages"
-                        wire:model="my_languages"
-                        :options="$languages"
-                        serachable />
-                    
-                    <x-editor wire:model="bio" label="Biography" hint="the great biography" />
+                <x-choices-offline
+                    label="My Languages"
+                    wire:model="my_languages"
+                    :options="$languages"
+                    serachable />
+                
+                <x-editor wire:model="bio" label="Biography" hint="the great biography" />
 
-                    <x-slot:actions>
-                        <x-button label="Cancel" link="/users" />
-                        <x-button label="Save" icon="o-paper-airplane" spinner="save" type="submit" class="btn-primary" />
-                    </x-slot:actions>
-                </x-form>
-            </div>
-            <div>
-                <img src="/storage/users/img/control-pana.png" width="300" class="mx-auto">
-            </div>
+                <x-slot:actions>
+                    <x-button label="Cancel" link="/users" />
+                    <x-button label="Save" icon="o-paper-airplane" spinner="save" type="submit" class="btn-primary" />
+                </x-slot:actions>
+            </x-form>
         </div>
+        <div>
+            <img src="/storage/users/img/control-pana.png" width="300" class="mx-auto">
+        </div>
+    </div>
 </div>
