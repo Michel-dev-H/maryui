@@ -21,6 +21,8 @@ new class extends Component {
 
     public array $sortBy = ['column' => 'id', 'direction' => 'asc'];
 
+    public bool $myModal1 = false;
+
     // Clear filters
     public function clear(): void
     {
@@ -110,6 +112,9 @@ new class extends Component {
             @scope('actions', $user)
             <x-button icon="o-trash" wire:click="delete({{ $user['id'] }})" wire:confirm="Are you sure?" spinner class="btn-ghost btn-sm text-error" />
             @endscope
+            @scope('actions', $user)
+            <x-button label="Open" @click="$wire.myModal1 = true" />
+            @endscope
         </x-table>
     </x-card>
 
@@ -124,4 +129,13 @@ new class extends Component {
             </x-slot:actions>
         </div>
     </x-drawer>
+
+    {{-- Modal --}}
+    <x-modal wire:model="myModal1" title="Hey" class="backdrop-blur">
+        Press `ESC`, click outside or click `CANCEL` to close.
+
+        <x-slot:actions>
+            <x-button label="Cancel" @click="$wire.myModal1 = false" />
+        </x-slot:actions>
+    </x-modal>
 </div>

@@ -41,9 +41,9 @@ class extends Component {
         <x-input placeholder="E-mail" wire:model="email" icon="o-envelope" />
         <x-input placeholder="Password" type="password" wire:model="password" icon="o-key" />
 
-        <x-slot:action>
+        <x-slot:actions>
             <x-button label="Create an account" class="btn-ghost" link="/register" />
             <x-button label="Login" type="submit" icon="o-paper-airplane" class="btn-primary" spinner="login" />
-        </x-slot:action>
+        </x-slot:actions>
     </x-form>
 </div>

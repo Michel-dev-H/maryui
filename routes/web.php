@@ -8,12 +8,14 @@ Volt::route('/login', 'login')->name('login');
 
 // Define the logout
 Route::get('/logout', function () {
-    auth()   ->logout();
+    auth()->logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
 
     return redirect('/');
 });
+
+Volt::route('/register', 'register');
 
 // Protected routes here
 Route::middleware('auth')->group(function (){
