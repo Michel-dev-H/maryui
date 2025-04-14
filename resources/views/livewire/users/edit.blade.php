@@ -77,8 +77,8 @@ new class extends Component {
                     <img src="{{ $user->avatar ?? '/empty-user.jpg' }}" class="h-36 rounded-lg">
                 </x-file>
 
-                <x-input label="Name" wire:model="name" />
-                <x-input label="Email" wire:model="email" />
+                <x-input  label="Name"    wire:model="name" />
+                <x-input  label="Email"   wire:model="email" />
                 <x-select label="country" wire:model="country_id" :options="$countries" placeholder="---" />
 
                 <x-choices-offline
