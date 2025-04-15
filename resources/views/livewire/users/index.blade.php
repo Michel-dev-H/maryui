@@ -147,6 +147,7 @@ new class extends Component {
         $user->languages()->sync($this->language);
 
         $this->showDetails  = false;
+        $this->canEdit      = true;
         $this->success('User updated successfully!', position: 'toast-bottom');
     }
 
