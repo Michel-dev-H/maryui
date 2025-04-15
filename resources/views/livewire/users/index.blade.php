@@ -71,12 +71,12 @@ new class extends Component {
 
     public function users(): LengthAwarePaginator
     {
-        return User::query()
-            ->withAggregate('country', 'name')
-            ->when($this->search,     fn(Builder $q) => $q->where('name', 'like', "%$this->search%"))
-            ->when($this->country_id, fn(Builder $q) => $q->where('country_id', $this->country_id))
-            ->orderBy(...array_values($this->sortBy))
-            ->paginate(5);
+    return User::query()
+        ->withAggregate('country', 'name')
+        ->when($this->search,     fn(Builder $q) => $q->where('name', 'like', "%$this->search%"))
+        ->when($this->country_id, fn(Builder $q) => $q->where('country_id', $this->country_id))
+        ->orderBy(...array_values($this->sortBy))
+        ->paginate(5);
     }
 
     public function with(): array
@@ -127,6 +127,12 @@ new class extends Component {
         $this->canEdit = false;
     }
 
+    public function detailNotEdit()
+    {
+        $this->canEdit      = true;
+        $this->showDetails  = false;
+    }
+
     public function saveEdit()
     {
         $user = User::find($this->selectedUser->id);
@@ -134,7 +140,7 @@ new class extends Component {
         $user->name       = $this->name;
         $user->email      = $this->email;
         $country_id       = array_search($this->country, $this->country_name);
-        $user->country_id = $countryId ?? null;
+        $user->country_id = $country_id ?? null;
         
         $user->save();
 
@@ -195,15 +201,29 @@ new class extends Component {
                 <x-input label="Name"    wire:model="name"     :disabled="$canEdit" />
                 <x-input label="Email"   wire:model="email"    :disabled="$canEdit" />
                 @if($canEdit)
-                    <x-input label="Country" wire:model="country" style="color: #222;" disabled />
+                    <x-select label="Country" wire:model="country" :options="$countries" disabled />
                 @else
                     <x-select
                         label="Country"
                         wire:model="country"
-                        :options="$countries->pluck('name', 'id')->toArray()" style="color: #222;" />
+                        :options="$countries" />
                 @endif
             </div>
-            <x-choices-offline label="My Languages" wire:model="language" :options="$languages" class="w-xs" :disabled="$canEdit" />
+            @if ($canEdit)
+                <x-input
+                    label="My Languages"
+                    wire:model="language"
+                    class="w-xs"
+                    disabled
+                />
+            @else
+                <x-choices-offline
+                    label="My Languages"
+                    wire:model="language"
+                    :options="$languages"
+                    class="w-xs"
+                />
+            @endif
         </x-form>
 
         <x-slot:actions>
@@ -212,7 +232,7 @@ new class extends Component {
             @else
                 <x-button label="Save" wire:click="saveEdit()" class="btn-success" />
             @endif
-            <x-button label="Close" wire:click="$set('showDetails', false)" class="btn-warning" />
+            <x-button label="Close" wire:click="detailNotEdit()" class="btn-warning" />
         </x-slot:actions>
     </x-modal>
 </div>
